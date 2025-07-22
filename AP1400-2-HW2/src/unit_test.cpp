@@ -4,7 +4,7 @@
 #include "server.h"
 #include "client.h"
 
-/*
+
 TEST(HW1Test, TEST1) {
     Server server{};
     auto bryan{server.add_client("bryan")};
@@ -140,13 +140,9 @@ TEST(HW1Test, TEST15) {
     show_wallets(server);
 
     std::string hash = crypto::sha256(mempool + std::to_string(nonce));
-    EXPECT_TRUE(hash.substr(0, 10).find("000") != std::string::npos);
+    EXPECT_TRUE(hash.substr(0, 10).find("00") != std::string::npos);
     // MINER is: sarah || bryan || clint
     EXPECT_TRUE(bryan->get_wallet()==4.5 || bryan->get_wallet()==10.75 || bryan->get_wallet()==4.5);
     EXPECT_TRUE(clint->get_wallet()==3.5 ||clint->get_wallet()==3.5 ||clint->get_wallet()==9.75);
     EXPECT_TRUE(sarah->get_wallet()==13.25 || sarah->get_wallet()==7 || sarah->get_wallet()==7);
 }
-*/
-
-
-

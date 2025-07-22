@@ -136,14 +136,37 @@ void crypto::Base64Decode(const char* b64message, unsigned char** buffer, size_t
   return std::string{base64Text};
 }
 
-bool crypto::verifySignature(std::string publicKey, std::string plainText,  std::string signatureBase64) {
-  RSA* publicRSA = createPublicRSA(publicKey);
-  unsigned char* encMessage;
-  size_t encMessageLength;
-  bool authentic;
-  Base64Decode((char*)signatureBase64.c_str(), &encMessage, &encMessageLength);
-  bool result = RSAVerifySignature(publicRSA, encMessage, encMessageLength, plainText.c_str(), plainText.length(), &authentic);
-  return result & authentic;
+bool crypto::verifySignature(std::string publicKey, std::string plainText, std::string signatureBase64) {
+    std::cerr << "[DEBUG] Start verifySignature" << std::endl;
+    std::cerr << "[DEBUG] publicKey size: " << publicKey.size() << std::endl;
+    std::cerr << "[DEBUG] plainText: " << plainText << std::endl;
+    std::cerr << "[DEBUG] signatureBase64 size: " << signatureBase64.size() << std::endl;
+
+    RSA* publicRSA = createPublicRSA(publicKey);
+    if (publicRSA == nullptr) {
+        std::cerr << "[ERROR] createPublicRSA returned nullptr" << std::endl;
+        return false;
+    }
+
+    unsigned char* encMessage = nullptr;
+    size_t encMessageLength = 0;
+    Base64Decode(signatureBase64.c_str(), &encMessage, &encMessageLength);
+
+    if (encMessage == nullptr || encMessageLength == 0) {
+        std::cerr << "[ERROR] Base64Decode failed or empty decoded message" << std::endl;
+        return false;
+    }
+
+    std::cerr << "[DEBUG] Decoded signature length: " << encMessageLength << std::endl;
+
+    bool authentic = false;
+    bool result = RSAVerifySignature(publicRSA, encMessage, encMessageLength, plainText.c_str(), plainText.length(), &authentic);
+
+    std::cerr << "[DEBUG] RSAVerifySignature result: " << result << ", authentic: " << authentic << std::endl;
+
+    free(encMessage);  // 記得釋放 Base64Decode malloc 的記憶體
+
+    return result && authentic;
 }
 
 const char* crypto::keyFromRSA(RSA* rsa, bool isPrivate)
