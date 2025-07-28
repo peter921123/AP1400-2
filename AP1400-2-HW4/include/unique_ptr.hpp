@@ -28,13 +28,13 @@ T* UniquePtr<T>::operator->() {
 
 template<typename T>
 void UniquePtr<T>::reset() {
-    UniquePtr temp{};
+    UniquePtr<T> temp{};
     std::swap(this->_p, temp._p);
 }
 
 template<typename T>
 void UniquePtr<T>::reset(T* other) {
-    UniquePtr temp{other};
+    UniquePtr<T> temp{other};
     std::swap(this->_p, temp._p);
 }
 
@@ -46,7 +46,6 @@ T* UniquePtr<T>::release() {
 }
 
 template <typename T>
-UniquePtr<T> make_unique(T value) {
-    UniquePtr<T> ptr{new T{value}};
-    return ptr;
+UniquePtr<T> make_unique(T&& value) {
+    return UniquePtr<T>{new T{std::forward<T>(value)}};
 }

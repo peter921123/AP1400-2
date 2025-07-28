@@ -26,6 +26,6 @@ private:
 };
 
 template <typename T>
-UniquePtr<T> make_unique(T);
+UniquePtr<T> make_unique(T&&);
 #include "unique_ptr.hpp"
 #endif //UNIQUE_PTR

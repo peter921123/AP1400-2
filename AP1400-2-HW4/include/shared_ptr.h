@@ -8,25 +8,28 @@ public:
     ~SharedPtr();
 
     SharedPtr(const SharedPtr<T>&);
-    SharedPtr& operator=(const SharedPtr<T>&);
+    SharedPtr<T>& operator=(const SharedPtr<T>&);
     
     size_t use_count() const;
 
     T* get() const;
     T operator*();
-    T* operatpr->();
+    T* operator->();
 
     void reset();
     void reset(T*);
 
     explicit operator bool() const {
-        return _p != nullptr
+        return _p != nullptr;
     }
 
 private:
     T* _p;
-    size_t count;
+    size_t* ptrCount;
 };
+
+template<typename T>
+SharedPtr<T> make_shared(T&&);
 
 #include "shared_ptr.hpp"
 #endif //SHARED_PTR
